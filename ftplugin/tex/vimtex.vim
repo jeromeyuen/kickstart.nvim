@@ -5,6 +5,8 @@ let g:vimtex_view_general_options = '-reuse-instance -forward-search @tex @line 
 " Setting Quickfix list to automatically close after one keystroke
 let g:vimtex_quickfix_autoclose_after_keystrokes = 1
 
+set syntax=on " Weirdly needed for syntax highlighting
+
 " Counts the number of words
 noremap <localleader>lw <Cmd>VimtexCountWords<CR>
 

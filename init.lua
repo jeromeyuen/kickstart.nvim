@@ -154,7 +154,7 @@ vim.opt.inccommand = 'split'
 vim.opt.cursorline = true
 
 -- Minimal number of screen lines to keep above and below the cursor.
-vim.opt.scrolloff = 5
+vim.opt.scrolloff = 4
 
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
@@ -162,7 +162,24 @@ vim.opt.scrolloff = 5
 vim.opt.confirm = true
 
 -- Set LaTeX as default filetype for *.tex files
-vim.g.tex_flavor = 'latex'
+-- vim.g.tex_flavor = 'latex'
+
+vim.opt.backup = false -- Does not create backup file
+vim.opt.swapfile = false -- Does not create a swapfile for buffers
+
+-- Tabbing
+vim.opt.tabstop = 4 -- Amount of space on screen a Tab character can occupy
+vim.opt.shiftwidth = 4 -- Amount of characters Neovim uses to indent a line
+vim.opt.expandtab = false -- Prevents transforming Tab character to spaces
+
+vim.opt.termguicolors = true -- Enables 24-bit RGB colour in the terminal
+
+-- Wrap
+vim.opt.wrap = true -- Wraps long lines
+vim.opt.breakindent = true -- Preserve indentation of a virtual line
+vim.opt.linebreak = true -- When wrapping long lines, breaks at 'breakat'; provides cleaner wrapping
+
+vim.cmd 'set whichwrap=b,<,>,[,]' -- Allows <BS> and left arrow key to wrap upwards to previous line and right arrow key to wrap downwards to next line
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -345,7 +362,7 @@ require('lazy').setup({
       -- Document existing key chains
       spec = {
         { '<leader>b', group = '[B]uffer' },
-        { '<leader>f', group = '[F]ile / [F]ormat' },
+        { '<leader>f', group = '[F]ile / [F]ormat / [F]ind' },
         { '<leader>w', group = '[W]indow' },
         { '<leader>l', group = '[L]aTeX' },
         { '<leader>s', group = '[S]earch' },
@@ -433,12 +450,14 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
-      vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch Seqect [T]elescope' })
+      vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch Select [T]elescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
+      vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = '[F]ind [R]ecent Files ("." for repeat)' }) -- Follow Doom Emacs
+      vim.keymap.set('n', '<leader>bb', builtin.buffers, { desc = 'Find existing [B]uffers' }) -- Follow Doom Emacs
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
@@ -463,6 +482,11 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Shortcut for searching your Neovim configuration files (follow Doom Emacs)
+      vim.keymap.set('n', '<leader>fp', function()
+        builtin.find_files { cwd = vim.fn.stdpath 'config' }
+      end, { desc = '[F]ind [P]ersonal nvim config files' })
     end,
   },
 
@@ -842,6 +866,28 @@ require('lazy').setup({
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
 
+        -- Taken from https://github.com/WizardStark/dotfiles/blob/main/home/.config/nvim/lua/config/editor/blink_cmp.lua
+        -- ['<Tab>'] = {
+        --   function(cmp)
+        --     if cmp.is_menu_visible() then
+        --       return require('blink.cmp').select_next()
+        --     elseif cmp.snippet_active() then
+        --       return cmp.snippet_forward()
+        --     end
+        --   end,
+        --   'fallback',
+        -- },
+        -- ['<S-Tab>'] = {
+        --   function(cmp)
+        --     if cmp.is_menu_visible() then
+        --       return require('blink.cmp').select_prev()
+        --     elseif cmp.snippet_active() then
+        --       return cmp.snippet_backward()
+        --     end
+        --   end,
+        --   'fallback',
+        -- },
+
         -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
         --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       },
@@ -850,6 +896,9 @@ require('lazy').setup({
         -- 'mono' (default) for 'Nerd Font Mono' or 'normal' for 'Nerd Font'
         -- Adjusts spacing to ensure icons are aligned
         nerd_font_variant = 'mono',
+        kind_icons = {
+          Snippet = '',
+        },
       },
 
       completion = {
@@ -859,7 +908,7 @@ require('lazy').setup({
       },
 
       sources = {
-        default = { 'lsp', 'path', 'snippets', 'lazydev' },
+        default = { 'lsp', 'path', 'snippets', 'lazydev', 'buffer' },
         providers = {
           lazydev = { module = 'lazydev.integrations.blink', score_offset = 100 },
         },
@@ -874,10 +923,29 @@ require('lazy').setup({
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
+      -- fuzzy = { implementation = 'lua' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
+
+      -- Taken from https://github.com/WizardStark/dotfiles/blob/main/home/.config/nvim/lua/config/editor/blink_cmp.lua
+      cmdline = {
+        completion = {
+          menu = {
+            auto_show = true,
+          },
+          ghost_text = {
+            enabled = false,
+          },
+          list = {
+            selection = {
+              preselect = true,
+              auto_insert = true,
+            },
+          },
+        },
+      },
     },
   },
 
@@ -979,7 +1047,7 @@ require('lazy').setup({
       require('mini.move').setup()
       require('mini.pairs').setup()
       require('mini.bracketed').setup()
-      require('mini.jump2d').setup()
+      -- require('mini.jump2d').setup() -- Now using ggandor/leap.nvim
       require('mini.trailspace').setup()
     end,
   },
@@ -1035,6 +1103,18 @@ require('lazy').setup({
 
   -- VimTex
   { 'lervag/vimtex', lazy = false },
+
+  -- Leap - Jump around the visible area quickly
+  {
+    'ggandor/leap.nvim',
+    dependencies = {
+      'tpope/vim-repeat',
+      opts = {},
+      config = function()
+        require('leap').add_default_mappings()
+      end,
+    },
+  },
 
   -- Undotree
   -- { 'mbbill/undotree', opts = {} },
