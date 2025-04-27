@@ -866,6 +866,20 @@ require('lazy').setup({
         -- See :h blink-cmp-config-keymap for defining your own keymap
         preset = 'default',
 
+        -- Just so I can remove any accidentally inserted <Tab>
+        vim.keymap.set('i', '<S-Tab>', '<BS>', { desc = 'Opposite of <Tab>' }),
+
+        ['<CR>'] = {
+          function(cmp)
+            if cmp.is_menu_visible() then
+              return require('blink.cmp').select_and_accept()
+              -- elseif cmp.snippet_active() then
+              --   return cmp.snippet_backward()
+            end
+          end,
+          'fallback',
+        },
+
         -- Taken from https://github.com/WizardStark/dotfiles/blob/main/home/.config/nvim/lua/config/editor/blink_cmp.lua
         -- ['<Tab>'] = {
         --   function(cmp)
