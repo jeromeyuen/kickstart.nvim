@@ -700,7 +700,7 @@ require('lazy').setup({
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
         clangd = {},
-        -- texlab = {},
+        texlab = {},
         -- gopls = {},
         -- pyright = {},
         -- rust_analyzer = {},
@@ -1128,6 +1128,13 @@ require('lazy').setup({
         require('leap').add_default_mappings()
       end,
     },
+  },
+
+  {
+    'chomosuke/typst-preview.nvim',
+    lazy = false, -- or ft = 'typst'
+    version = '1.*',
+    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
   },
 
   -- Undotree
