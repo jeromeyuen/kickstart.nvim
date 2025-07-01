@@ -161,11 +161,11 @@ vim.opt.scrolloff = 4
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
--- Set LaTeX as default filetype for *.tex files
--- vim.g.tex_flavor = 'latex'
-
 vim.opt.backup = false -- Does not create backup file
 vim.opt.swapfile = false -- Does not create a swapfile for buffers
+
+-- Changing directories
+-- vim.g.autochdir = true
 
 -- Tabbing
 vim.opt.tabstop = 4 -- Amount of space on screen a Tab character can occupy
@@ -1076,10 +1076,11 @@ require('lazy').setup({
       auto_install = true,
       highlight = {
         enable = true,
+        disable = { 'latex' },
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = { 'ruby', 'latex' },
       },
       indent = { enable = true, disable = { 'ruby' } },
     },
@@ -1135,6 +1136,20 @@ require('lazy').setup({
     lazy = false, -- or ft = 'typst'
     version = '1.*',
     opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+  },
+
+  {
+    'iamcco/markdown-preview.nvim',
+    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
+    ft = { 'markdown' },
+    build = function()
+      vim.fn['mkdp#util#install']()
+    end,
+    config = function()
+      vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mp', '<Plug>MarkdownPreview')
+      vim.keymap.set({ 'n', 'v', 'x' }, '<leader>ms', '<Plug>MarkdownPreviewStop')
+      vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mt', '<Plug>MarkdownPreviewToggle')
+    end,
   },
 
   -- Undotree
