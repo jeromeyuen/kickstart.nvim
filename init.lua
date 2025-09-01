@@ -161,25 +161,27 @@ vim.opt.scrolloff = 4
 -- See `:help 'confirm'`
 vim.opt.confirm = true
 
-vim.opt.backup = false -- Does not create backup file
+vim.opt.backup = false   -- Does not create backup file
 vim.opt.swapfile = false -- Does not create a swapfile for buffers
 
 -- Changing directories
 -- vim.g.autochdir = true
 
 -- Tabbing
-vim.opt.tabstop = 4 -- Amount of space on screen a Tab character can occupy
-vim.opt.shiftwidth = 4 -- Amount of characters Neovim uses to indent a line
-vim.opt.expandtab = false -- Prevents transforming Tab character to spaces
+vim.opt.tabstop = 4          -- Amount of space on screen a Tab character can occupy
+vim.opt.shiftwidth = 4       -- Amount of characters Neovim uses to indent a line
+vim.opt.expandtab = false    -- Prevents transforming Tab character to spaces
 
 vim.opt.termguicolors = true -- Enables 24-bit RGB colour in the terminal
 
 -- Wrap
-vim.opt.wrap = true -- Wraps long lines
-vim.opt.breakindent = true -- Preserve indentation of a virtual line
-vim.opt.linebreak = true -- When wrapping long lines, breaks at 'breakat'; provides cleaner wrapping
+vim.opt.wrap = true               -- Wraps long lines
+vim.opt.breakindent = true        -- Preserve indentation of a virtual line
+vim.opt.linebreak = true          -- When wrapping long lines, breaks at 'breakat'; provides cleaner wrapping
 
 vim.cmd 'set whichwrap=b,<,>,[,]' -- Allows <BS> and left arrow key to wrap upwards to previous line and right arrow key to wrap downwards to next line
+
+vim.opt.autochdir = true
 
 -- [[ Basic Keymaps ]]
 --  See `:help vim.keymap.set()`
@@ -315,7 +317,7 @@ require('lazy').setup({
   -- Then, because we use the `opts` key (recommended), the configuration runs
   -- after the plugin has been loaded as `require(MODULE).setup(opts)`.
 
-  { -- Useful plugin to show you pending keybinds.
+  {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
     opts = {
@@ -367,7 +369,7 @@ require('lazy').setup({
         { '<leader>l', group = '[L]aTeX' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>h', group = 'Git [H]unk',                mode = { 'n', 'v' } },
       },
     },
   },
@@ -400,7 +402,7 @@ require('lazy').setup({
       { 'nvim-telescope/telescope-ui-select.nvim' },
 
       -- Useful for getting pretty icons, but requires a Nerd Font.
-      { 'nvim-tree/nvim-web-devicons', enabled = vim.g.have_nerd_font },
+      { 'nvim-tree/nvim-web-devicons',            enabled = vim.g.have_nerd_font },
     },
     config = function()
       -- Telescope is a fuzzy finder that comes with a lot of different things that
@@ -457,7 +459,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
       vim.keymap.set('n', '<leader>s.', builtin.oldfiles, { desc = '[S]earch Recent Files ("." for repeat)' })
       vim.keymap.set('n', '<leader>fr', builtin.oldfiles, { desc = '[F]ind [R]ecent Files ("." for repeat)' }) -- Follow Doom Emacs
-      vim.keymap.set('n', '<leader>bb', builtin.buffers, { desc = 'Find existing [B]uffers' }) -- Follow Doom Emacs
+      vim.keymap.set('n', '<leader>bb', builtin.buffers, { desc = 'Find existing [B]uffers' })                 -- Follow Doom Emacs
       vim.keymap.set('n', '<leader><leader>', builtin.buffers, { desc = '[ ] Find existing buffers' })
 
       -- Slightly advanced example of overriding default behavior and theme
@@ -515,7 +517,7 @@ require('lazy').setup({
       'WhoIsSethDaniel/mason-tool-installer.nvim',
 
       -- Useful status updates for LSP.
-      { 'j-hui/fidget.nvim', opts = {} },
+      { 'j-hui/fidget.nvim',       opts = {} },
 
       -- Allows extra capabilities provided by blink.cmp
       'saghen/blink.cmp',
@@ -712,6 +714,22 @@ require('lazy').setup({
         -- But for many setups, the LSP (`ts_ls`) will work just fine
         -- ts_ls = {},
         --
+        pylsp = {
+          settings = {
+            pylsp = {
+              plugins = {
+                pyflakes = { enabled = false },
+                pycodestyle = { enabled = false },
+                autopep8 = { enabled = false },
+                yapf = { enabled = false },
+                mccabe = { enabled = false },
+                pylsp_mypy = { enabled = false },
+                pylsp_black = { enabled = false },
+                pylsp_isort = { enabled = false },
+              },
+            },
+          },
+        },
 
         lua_ls = {
           -- cmd = { ... },
@@ -765,46 +783,46 @@ require('lazy').setup({
     end,
   },
 
-  { -- Autoformat
-    'stevearc/conform.nvim',
-    event = { 'BufWritePre' },
-    cmd = { 'ConformInfo' },
-    keys = {
-      {
-        '<leader>fb',
-        function()
-          require('conform').format { async = true, lsp_format = 'fallback' }
-        end,
-        mode = '',
-        desc = '[F]ormat [B]uffer',
-      },
-    },
-    opts = {
-      notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
-      formatters_by_ft = {
-        lua = { 'stylua' },
-        -- Conform can also run multiple formatters sequentially
-        -- python = { "isort", "black" },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
-        -- javascript = { "prettierd", "prettier", stop_after_first = true },
-      },
-    },
-  },
+  -- { -- Autoformat
+  --   'stevearc/conform.nvim',
+  --   event = { 'BufWritePre' },
+  --   cmd = { 'ConformInfo' },
+  --   keys = {
+  --     {
+  --       '<leader>fb',
+  --       function()
+  --         require('conform').format { async = true, lsp_format = 'fallback' }
+  --       end,
+  --       mode = '',
+  --       desc = '[F]ormat [B]uffer',
+  --     },
+  --   },
+  --   opts = {
+  --     notify_on_error = false,
+  --     format_on_save = function(bufnr)
+  --       -- Disable "format_on_save lsp_fallback" for languages that don't
+  --       -- have a well standardized coding style. You can add additional
+  --       -- languages here or re-enable it for the disabled ones.
+  --       local disable_filetypes = { c = true, cpp = true }
+  --       if disable_filetypes[vim.bo[bufnr].filetype] then
+  --         return nil
+  --       else
+  --         return {
+  --           timeout_ms = 500,
+  --           lsp_format = 'fallback',
+  --         }
+  --       end
+  --     end,
+  --     formatters_by_ft = {
+  --       lua = { 'stylua' },
+  --       -- Conform can also run multiple formatters sequentially
+  --       -- python = { "isort", "black" },
+  --       --
+  --       -- You can use 'stop_after_first' to run the first available formatter from the list
+  --       -- javascript = { "prettierd", "prettier", stop_after_first = true },
+  --     },
+  --   },
+  -- },
 
   { -- Autocompletion
     'saghen/blink.cmp',
@@ -1007,7 +1025,7 @@ require('lazy').setup({
         invert_tabline = false,
         invert_intend_guides = false,
         inverse = true, -- invert background for search, diffs, statuslines and errors
-        contrast = '', -- can be "hard", "soft" or empty string
+        contrast = '',  -- can be "hard", "soft" or empty string
         palette_overrides = {},
         overrides = {},
         dim_inactive = false,
@@ -1071,7 +1089,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'python', 'query', 'vim', 'vimdoc' },
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1104,7 +1122,7 @@ require('lazy').setup({
   },
 
   -- Comment.nvim - Adds linewise and blockwise commenting capabilities
-  { 'numToStr/Comment.nvim', opts = {} },
+  { 'numToStr/Comment.nvim',    opts = {} },
 
   -- Surround
   {
@@ -1135,7 +1153,7 @@ require('lazy').setup({
     'chomosuke/typst-preview.nvim',
     lazy = false, -- or ft = 'typst'
     version = '1.*',
-    opts = {}, -- lazy.nvim will implicitly calls `setup {}`
+    opts = {},    -- lazy.nvim will implicitly calls `setup {}`
   },
 
   {
@@ -1149,6 +1167,63 @@ require('lazy').setup({
       vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mp', '<Plug>MarkdownPreview')
       vim.keymap.set({ 'n', 'v', 'x' }, '<leader>ms', '<Plug>MarkdownPreviewStop')
       vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mt', '<Plug>MarkdownPreviewToggle')
+    end,
+  },
+
+  -- Format on save and linters
+  {
+    'nvimtools/none-ls.nvim',
+    dependencies = {
+      'nvimtools/none-ls-extras.nvim',
+      'jayp0521/mason-null-ls.nvim', -- ensure dependencies are installed
+    },
+    config = function()
+      local null_ls = require 'null-ls'
+      local formatting = null_ls.builtins.formatting   -- to setup formatters
+      local diagnostics = null_ls.builtins.diagnostics -- to setup linters
+
+      -- list of formatters & linters for mason to install
+      require('mason-null-ls').setup {
+        ensure_installed = {
+          -- 'checkmake',
+          'prettier', -- ts/js formatter
+          'eslint_d', -- ts/js linter
+          'shfmt',
+          -- 'stylua', -- lua formatter; Already installed via Mason
+          'ruff', -- Python linter and formatter;
+        },
+        -- auto-install configured formatters & linters (with null-ls)
+        automatic_installation = true,
+      }
+
+      local sources = {
+        diagnostics.checkmake,
+        formatting.prettier.with { filetypes = { 'html', 'json', 'yaml', 'markdown' } },
+        formatting.stylua,
+        formatting.shfmt.with { args = { '-i', '4' } },
+        formatting.terraform_fmt,
+        require('none-ls.formatting.ruff').with { extra_args = { '--extend-select', 'I' } },
+        require 'none-ls.formatting.ruff_format',
+      }
+
+      local augroup = vim.api.nvim_create_augroup('LspFormatting', {})
+      null_ls.setup {
+        -- debug = true, -- Enable debug mode. Inspect logs with :NullLsLog.
+        sources = sources,
+        -- you can reuse a shared lspconfig on_attach callback here
+        on_attach = function(client, bufnr)
+          if client.supports_method 'textDocument/formatting' then
+            vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
+            vim.api.nvim_create_autocmd('BufWritePre', {
+              group = augroup,
+              buffer = bufnr,
+              callback = function()
+                vim.lsp.buf.format { async = false }
+              end,
+            })
+          end
+        end,
+      }
     end,
   },
 
@@ -1186,7 +1261,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  -- require 'kickstart.plugins.debug',
+  require 'kickstart.plugins.debug',
   -- require 'kickstart.plugins.indent_line',
   -- require 'kickstart.plugins.lint',
   -- require 'kickstart.plugins.autopairs',
