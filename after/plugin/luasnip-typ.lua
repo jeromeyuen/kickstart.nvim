@@ -64,7 +64,7 @@ ls.add_snippets('typst', {
     )
   ),
 
-  s( -- For side by side image
+  s( -- For side by side image (but only shared caption)
     'image_side-by-side',
     fmt(
       [[
@@ -89,6 +89,40 @@ ls.add_snippets('typst', {
       { delimiters = '<>' }
     )
   ),
+
+  s( -- For a grid of images (can have individual captions)
+    'grid-1-images',
+    fmt(
+      [[
+        #grid(
+          columns: 2,
+          gutter: 10pt,
+          [
+            #figure(
+              caption: [<>],
+              image("<>", width: 100%)
+            ) <<<>>>
+          ],
+          [
+            #figure(
+              caption: [<>],
+              image("<>", width: 100%)
+            ) <<<>>>
+          ],
+        )
+      ]],
+      {
+        i(1),
+        i(3),
+        i(2),
+        i(4),
+        i(6),
+        i(5),
+      },
+      { delimiters = '<>' }
+    )
+  ),
+
   s( -- image function only, meant to be used within "figure" function
     'image_only',
     fmt(
@@ -317,41 +351,146 @@ ls.add_snippets('typst', {
     )
   ),
 
-  s( -- shortcut for tables read in from CSV and in landscape mode
-    'table_2_csv_flipped',
+  s( -- shortcut for tables read in from CSV and (optionally) in landscape mode
+    'table_2_csv',
     fmt(
       [[
+        // Importing CSV and splitting into header and content
         #let <a> = csv("<>")
-        // #<a> // For testing only
-        #let <a>_headers = <a>.slice(0, count:1).flatten()
-        #let <a>_content = <a>.slice(1, none).flatten()
+        #let <a>_header = <a>.slice(0, count:1)
+        #let <a>_content = <a>.slice(1)
+
+        // Manipulating header and content
+        #let <a>_header = <a>_header.map(m =>> {
+          // Write mapping function here.
+          // Write "m" to leave CSV as is
+          <>
+        })
+        #let <a>_content = <a>_content.map(m =>> {
+          // Write mapping function here.
+          // Write "m" to leave CSV as is
+          <>
+        })
 
         #show figure: set block(breakable: true)
-        #page(flipped: true)[
+        // #page(flipped: true)[
         #figure(
           caption: [<>],
           table(
-            columns: <a>_headers.len(),
+            columns: <a>_header.flatten().len(),
             stroke: none,
             table.hline(stroke: 0.7pt + black), // toprule
-            table.header(
-              ..<a>_headers
+            table.header( // If want to write your own, can too
+              ..<a>_header.flatten()
             ),
             table.hline(stroke: 0.3pt + black), // midrule
-              ..<a>_content,
+              ..<a>_content.flatten(),
             table.hline(stroke: 0.7pt + black), // bottomrule
           )
         ) <<tab:<>>>
-        ]
+        // ]
         #show figure: set block(breakable: false)
       ]],
       {
         a = i(1), -- Typst variable name
         i(2), -- CSV file select
+        i(5), -- CSV's header function
+        i(6), -- CSV's content function
         i(3), -- Caption
         i(4), -- Label
       },
       { delimiters = '<>', repeat_duplicates = true }
+    )
+  ),
+
+  s( -- shortcut for table cells
+    'table_3_cells',
+    fmt(
+      [[
+        table.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>]
+      ]],
+      {
+        i(1),
+        i(2),
+        i(3),
+      },
+      { delimiters = '<>' }
+    )
+  ),
+
+  s( -- shortcut for adding columns with dictionary
+    'table_4_csv_dict_add_col',
+    fmt(
+      [[
+        // Adding new columns by specifying a dictionary as ("row number": "content")
+        #let dict = (<>)
+        #let n = 0
+        #while n << <a>.len() {
+          if str(n) in dict { test.at(n).push(dict.at(str(n))) }
+          else { <a>.at(n).push([<>]) }
+          n = n + 1
+        }
+      ]],
+      {
+        a = i(1), -- Typst csv variable name
+        i(2),
+        i(3),
+      },
+      { delimiters = '<>', repeat_duplicates = true }
+    )
+  ),
+
+  s( -- shortcut for adding columns by specifying row numbers
+    'table_5_csv_row_add_col',
+    fmt(
+      [[
+        // Adding new columns by specifying row numbers as strings e.g. ("1", "5")
+        #let rows = (<>)
+        #let n = 0
+        #while n << <a>.len() { -- Contents to add to specified/unspecified rows (put empty string if nothing)
+          if str(n) in rows { <a>.at(n).push([<>]) }
+          else { <a>.at(n).push([<>]) }
+          n = n + 1
+        }
+      ]],
+      {
+        a = i(1), -- Typst csv variable name
+        i(2),
+        i(3),
+        i(4),
+      },
+      { delimiters = '<>', repeat_duplicates = true }
+    )
+  ),
+
+  s( -- shortcut for adding fills parameter
+    'table_6_fills',
+    fmt(
+      [[
+        fill: (_, col) =>> {
+          if col <<= 0 { white }
+          else if col <<= 1 { gray.lighten(70%) }
+          else if col <<= 3 { white }
+          else if col <<= 4 { gray.lighten(70%) }
+        },
+      ]],
+      {},
+      { delimiters = '<>', repeat_duplicates = true }
+    )
+  ),
+
+  s( -- shortcut for grid cells
+    'grid-2-cells',
+    fmt(
+      [[
+        grid.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>],
+      ]],
+      {
+        i(1),
+        i(2),
+        i(3),
+      },
+      { delimiters = '<>' }
     )
   ),
 })
