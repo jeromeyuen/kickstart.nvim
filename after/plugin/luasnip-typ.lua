@@ -1,4 +1,4 @@
-local ls = require 'luasnip'
+local ls = require("luasnip")
 local s = ls.snippet
 -- local sn = ls.snippet_node
 -- local isn = ls.indent_snippet_node
@@ -10,14 +10,14 @@ local i = ls.insert_node
 -- local r = ls.restore_node
 -- local events = require 'luasnip.util.events'
 -- local ai = require 'luasnip.nodes.absolute_indexer'
-local extras = require 'luasnip.extras'
+local extras = require("luasnip.extras")
 -- local l = extras.lambda
 local rep = extras.rep
 -- local p = extras.partial
 -- local m = extras.match
 -- local n = extras.nonempty
 -- local dl = extras.dynamic_lambda
-local fmt = require('luasnip.extras.fmt').fmt
+local fmt = require("luasnip.extras.fmt").fmt
 -- local fmta = require('luasnip.extras.fmt').fmta
 -- local conds = require 'luasnip.extras.expand_conditions'
 -- local postfix = require('luasnip.extras.postfix').postfix
@@ -27,47 +27,47 @@ local fmt = require('luasnip.extras.fmt').fmt
 -- local k = require('luasnip.nodes.key_indexer').new_key
 
 -- Add luasnip snippets to typ (Typst) files
-ls.add_snippets('typst', {
-  s( -- Typst version of figure "environment"
-    'fig',
-    fmt(
-      [[
+ls.add_snippets("typst", {
+	s( -- Typst version of figure "environment"
+		"fig",
+		fmt(
+			[[
         #figure(
           caption: [<>],
           <>
         ) <<<>>>
       ]],
-      {
-        i(1),
-        i(3),
-        i(2),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(3),
+				i(2),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- Typst version of figure "environment", for images
-    'image',
-    fmt(
-      [[
+	s( -- Typst version of figure "environment", for images
+		"image",
+		fmt(
+			[[
         #figure(
           caption: [<>],
           image("<>", width: 70%)
         ) <<<>>>
       ]],
-      {
-        i(1),
-        i(3),
-        i(2),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(3),
+				i(2),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- For side by side image (but only shared caption)
-    'image_side-by-side',
-    fmt(
-      [[
+	s( -- For side by side image (but only shared caption)
+		"image_side-by-side",
+		fmt(
+			[[
         #figure(
           caption: [<>],
           grid(
@@ -80,66 +80,67 @@ ls.add_snippets('typst', {
           )
         ) <<<>>>
       ]],
-      {
-        i(1),
-        i(3),
-        i(4),
-        i(2),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(3),
+				i(4),
+				i(2),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- For a grid of images (can have individual captions)
-    'grid-1-images',
-    fmt(
-      [[
-        #grid(
-          columns: 2,
-          gutter: 10pt,
-          [
-            #figure(
-              caption: [<>],
-              image("<>", width: 100%)
-            ) <<<>>>
-          ],
-          [
-            #figure(
-              caption: [<>],
-              image("<>", width: 100%)
-            ) <<<>>>
-          ],
-        )
-      ]],
-      {
-        i(1),
-        i(3),
-        i(2),
-        i(4),
-        i(6),
-        i(5),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+	s( -- For a grid of images (can have individual captions)
+		"grid-1-images",
+		fmt(
+			[[
+			 #grid(
+			   columns: 2*(1fr,),
+			   gutter: 5pt,
+			   inset: 5pt,
+			   [
+				 #figure(
+				   caption: [<>],
+				   image("<>", width: 100%)
+				 ) <<<>>>
+			   ],
+			   [
+				 #figure(
+				   caption: [<>],
+				   image("<>", width: 100%)
+				 ) <<<>>>
+			   ],
+			  )
+		   ]],
+			{
+				i(1),
+				i(3),
+				i(2),
+				i(4),
+				i(6),
+				i(5),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- image function only, meant to be used within "figure" function
-    'image_only',
-    fmt(
-      [[
+	s( -- image function only, meant to be used within "figure" function
+		"image_only",
+		fmt(
+			[[
         image("<>", width: 70%)
       ]],
-      {
-        i(1),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- "table" meant to be used inside "figure" environment
-    'table_1_booktabs-style',
-    fmt(
-      [[
+	s( -- "table" meant to be used inside "figure" environment
+		"table_1_booktabs-style",
+		fmt(
+			[[
         table(
           columns: <>,
           stroke: none,
@@ -152,36 +153,36 @@ ls.add_snippets('typst', {
           table.hline(stroke: 0.7pt + black), // bottomrule
         )
       ]],
-      {
-        i(1),
-        i(2),
-        i(3),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(2),
+				i(3),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for headings
-    'heading',
-    fmt(
-      [[
+	s( -- shortcut for headings
+		"heading",
+		fmt(
+			[[
         #heading(
           numbering: none,
           // depth: 1,
           // outlined: true
         )[<>]
       ]],
-      {
-        i(1),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for boilerplate (Page settings and LaTeX fonts)
-    'boiler_general_1',
-    fmt(
-      [[
+	s( -- shortcut for boilerplate (Page settings and LaTeX fonts)
+		"boiler_general_1",
+		fmt(
+			[[
         // Page settings
         #set page(
           margin: 1in,
@@ -191,15 +192,15 @@ ls.add_snippets('typst', {
         // #set text(font: "Latin Modern Roman")
         #set text(font: "New Computer Modern")
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for boilerplate (pretty section headers)
-    'boiler_general_2',
-    fmt(
-      [[
+	s( -- shortcut for boilerplate (pretty section headers)
+		"boiler_general_2",
+		fmt(
+			[[
         // Prettify numbered and unnumbered section headers
         #let doc-heading-numbering = "1.1"
         #set heading(numbering: doc-heading-numbering)
@@ -220,15 +221,15 @@ ls.add_snippets('typst', {
           }
         }
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for boilerplate (Pretty image and tables)
-    'boiler_general_3',
-    fmt(
-      [[
+	s( -- shortcut for boilerplate (Pretty image and tables)
+		"boiler_general_3",
+		fmt(
+			[[
         // Prettify image and tables (figure floats)
         #show figure.where(kind: image): it =>> block(
           above: 1.5em,
@@ -248,15 +249,15 @@ ls.add_snippets('typst', {
           #v(10pt)
           #it.body]
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for boilerplate (Pretty lists)
-    'boiler_general_4',
-    fmt(
-      [[
+	s( -- shortcut for boilerplate (Pretty lists)
+		"boiler_general_4",
+		fmt(
+			[[
         // Prettify unnumbered and numbered lists
         #set list(indent: 1em, spacing: 1em)
         #show list: it =>> block(
@@ -271,27 +272,27 @@ ls.add_snippets('typst', {
           below: 1em,
         )[#it]
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for boilerplate (Math equation numbering)
-    'boiler_general_5',
-    fmt(
-      [[
+	s( -- shortcut for boilerplate (Math equation numbering)
+		"boiler_general_5",
+		fmt(
+			[[
         // Give math equations numberings
         #set math.equation(numbering: "(1)")
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for front matter (Reports)
-    'frontmatter_1_reports_boiler',
-    fmt(
-      [[
+	s( -- shortcut for front matter (Reports)
+		"frontmatter_1_reports_boiler",
+		fmt(
+			[[
         // Front matter starts
         #let title = [title]
         #let author = [Jerome Yuen]
@@ -308,15 +309,15 @@ ls.add_snippets('typst', {
           #v(15pt)
         ]
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for table of contents
-    'toc_boiler',
-    fmt(
-      [[
+	s( -- shortcut for table of contents
+		"toc_boiler",
+		fmt(
+			[[
         // TOC
         #outline()
 
@@ -332,29 +333,29 @@ ls.add_snippets('typst', {
         //   target: figure.where(kind: table),
         // )
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for main matter (general settings)
-    'mainmatter_1_settings_boiler',
-    fmt(
-      [[
+	s( -- shortcut for main matter (general settings)
+		"mainmatter_1_settings_boiler",
+		fmt(
+			[[
         // Main content starts (general settings)
         #pagebreak()
         #set page(numbering: "1") // Start numbering here (arabic numerals)
         #set par(leading: 0.55em, spacing: 0.55em, first-line-indent: 1.8em, justify: true)
       ]],
-      {},
-      { delimiters = '<>' }
-    )
-  ),
+			{},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for tables read in from CSV and (optionally) in landscape mode
-    'table_2_csv',
-    fmt(
-      [[
+	s( -- shortcut for tables read in from CSV and (optionally) in landscape mode
+		"table_2_csv",
+		fmt(
+			[[
         // Importing CSV and splitting into header and content
         #let <a> = csv("<>")
         #let <a>_header = <a>.slice(0, count:1)
@@ -391,37 +392,37 @@ ls.add_snippets('typst', {
         // ]
         #show figure: set block(breakable: false)
       ]],
-      {
-        a = i(1), -- Typst variable name
-        i(2), -- CSV file select
-        i(5), -- CSV's header function
-        i(6), -- CSV's content function
-        i(3), -- Caption
-        i(4), -- Label
-      },
-      { delimiters = '<>', repeat_duplicates = true }
-    )
-  ),
+			{
+				a = i(1), -- Typst variable name
+				i(2), -- CSV file select
+				i(5), -- CSV's header function
+				i(6), -- CSV's content function
+				i(3), -- Caption
+				i(4), -- Label
+			},
+			{ delimiters = "<>", repeat_duplicates = true }
+		)
+	),
 
-  s( -- shortcut for table cells
-    'table_3_cells',
-    fmt(
-      [[
+	s( -- shortcut for table cells
+		"table_3_cells",
+		fmt(
+			[[
         table.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>]
       ]],
-      {
-        i(1),
-        i(2),
-        i(3),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(2),
+				i(3),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 
-  s( -- shortcut for adding columns with dictionary
-    'table_4_csv_dict_add_col',
-    fmt(
-      [[
+	s( -- shortcut for adding columns with dictionary
+		"table_4_csv_dict_add_col",
+		fmt(
+			[[
         // Adding new columns by specifying a dictionary as ("row number": "content")
         #let dict = (<>)
         #let n = 0
@@ -431,19 +432,19 @@ ls.add_snippets('typst', {
           n = n + 1
         }
       ]],
-      {
-        a = i(1), -- Typst csv variable name
-        i(2),
-        i(3),
-      },
-      { delimiters = '<>', repeat_duplicates = true }
-    )
-  ),
+			{
+				a = i(1), -- Typst csv variable name
+				i(2),
+				i(3),
+			},
+			{ delimiters = "<>", repeat_duplicates = true }
+		)
+	),
 
-  s( -- shortcut for adding columns by specifying row numbers
-    'table_5_csv_row_add_col',
-    fmt(
-      [[
+	s( -- shortcut for adding columns by specifying row numbers
+		"table_5_csv_row_add_col",
+		fmt(
+			[[
         // Adding new columns by specifying row numbers as strings e.g. ("1", "5")
         #let rows = (<>)
         #let n = 0
@@ -453,20 +454,20 @@ ls.add_snippets('typst', {
           n = n + 1
         }
       ]],
-      {
-        a = i(1), -- Typst csv variable name
-        i(2),
-        i(3),
-        i(4),
-      },
-      { delimiters = '<>', repeat_duplicates = true }
-    )
-  ),
+			{
+				a = i(1), -- Typst csv variable name
+				i(2),
+				i(3),
+				i(4),
+			},
+			{ delimiters = "<>", repeat_duplicates = true }
+		)
+	),
 
-  s( -- shortcut for adding fills parameter
-    'table_6_fills',
-    fmt(
-      [[
+	s( -- shortcut for adding fills parameter
+		"table_6_fills",
+		fmt(
+			[[
         fill: (_, col) =>> {
           if col <<= 0 { white }
           else if col <<= 1 { gray.lighten(70%) }
@@ -474,23 +475,77 @@ ls.add_snippets('typst', {
           else if col <<= 4 { gray.lighten(70%) }
         },
       ]],
-      {},
-      { delimiters = '<>', repeat_duplicates = true }
-    )
-  ),
+			{},
+			{ delimiters = "<>", repeat_duplicates = true }
+		)
+	),
 
-  s( -- shortcut for grid cells
-    'grid-2-cells',
-    fmt(
-      [[
+	s( -- shortcut for table cells
+		"table-7-cells",
+		fmt(
+			[[
+        table.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>],
+      ]],
+			{
+				i(1),
+				i(2),
+				i(3),
+			},
+			{ delimiters = "<>" }
+		)
+	),
+
+	s( -- shortcut for grid cells
+		"grid-2-cells",
+		fmt(
+			[[
         grid.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>],
       ]],
-      {
-        i(1),
-        i(2),
-        i(3),
-      },
-      { delimiters = '<>' }
-    )
-  ),
+			{
+				i(1),
+				i(2),
+				i(3),
+			},
+			{ delimiters = "<>" }
+		)
+	),
+
+	s( -- For a normal grid
+		"grid-3-normal",
+		fmt(
+			[[
+			 #grid(
+			   columns: 2*(1fr,),
+			   gutter: 5pt,
+			   inset: 5pt,
+			   [
+			   	 <>
+			   ],
+			   [
+			   	 <>
+			   ],
+			  )
+		   ]],
+			{
+				i(1),
+				i(2),
+			},
+			{ delimiters = "<>" }
+		)
+	),
+
+	s( -- For adding an object for alignment
+		"alignment",
+		fmt(
+			[[
+			 #align(center + horizon)[
+			 	<>
+			 ]
+		   ]],
+			{
+				i(1),
+			},
+			{ delimiters = "<>" }
+		)
+	),
 })
