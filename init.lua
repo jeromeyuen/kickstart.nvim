@@ -1240,6 +1240,9 @@ require('lazy').setup({
     end,
   },
 
+  -- iron.nvim (Interactive REPL over Neovim)
+  { 'Vigemus/iron.nvim', opts = {} },
+
   -- Undotree
   -- { 'mbbill/undotree', opts = {} },
 
