@@ -701,7 +701,18 @@ require('lazy').setup({
       --  - settings (table): Override the default settings passed when initializing the server.
       --        For example, to see the options for `lua_ls`, you could go to: https://luals.github.io/wiki/settings/
       local servers = {
-        clangd = {},
+        clangd = {
+          cmd = {
+            'clangd',
+            '--background-index',
+            '--clang-tidy',
+            '--log=verbose',
+            '--query-driver=C:/Program Files/LLVM/bin/clang++.exe',
+          },
+          init_options = {
+            '-std=c++17',
+          },
+        },
         texlab = {},
         -- gopls = {},
         -- pyright = {},
@@ -1135,7 +1146,7 @@ require('lazy').setup({
   -- { 'tpope/vim-repeat', opts = {} },
 
   -- VimTex
-  { 'lervag/vimtex', lazy = false },
+  { 'lervag/vimtex',     lazy = false },
 
   -- Leap - Jump around the visible area quickly
   {
