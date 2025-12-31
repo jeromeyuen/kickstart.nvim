@@ -1210,7 +1210,7 @@ require('lazy').setup({
       }
 
       local sources = {
-        diagnostics.checkmake,
+        -- diagnostics.checkmake,
         formatting.prettier.with { filetypes = { 'html', 'json', 'yaml', 'markdown' } },
         formatting.stylua,
         formatting.shfmt.with { args = { '-i', '4' } },
