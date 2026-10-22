@@ -1,4 +1,4 @@
-local ls = require("luasnip")
+local ls = require 'luasnip'
 local s = ls.snippet
 -- local sn = ls.snippet_node
 -- local isn = ls.indent_snippet_node
@@ -10,14 +10,14 @@ local i = ls.insert_node
 -- local r = ls.restore_node
 -- local events = require 'luasnip.util.events'
 -- local ai = require 'luasnip.nodes.absolute_indexer'
-local extras = require("luasnip.extras")
+local extras = require 'luasnip.extras'
 -- local l = extras.lambda
 local rep = extras.rep
 -- local p = extras.partial
 -- local m = extras.match
 -- local n = extras.nonempty
 -- local dl = extras.dynamic_lambda
-local fmt = require("luasnip.extras.fmt").fmt
+local fmt = require('luasnip.extras.fmt').fmt
 -- local fmta = require('luasnip.extras.fmt').fmta
 -- local conds = require 'luasnip.extras.expand_conditions'
 -- local postfix = require('luasnip.extras.postfix').postfix
@@ -27,9 +27,9 @@ local fmt = require("luasnip.extras.fmt").fmt
 -- local k = require('luasnip.nodes.key_indexer').new_key
 
 -- Add luasnip snippets to typ (Typst) files
-ls.add_snippets("typst", {
+ls.add_snippets('typst', {
 	s( -- Typst version of figure "environment"
-		"fig",
+		'fig',
 		fmt(
 			[[
         #figure(
@@ -42,12 +42,12 @@ ls.add_snippets("typst", {
 				i(3),
 				i(2),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- Typst version of figure "environment", for images
-		"image",
+		'image',
 		fmt(
 			[[
         #figure(
@@ -60,12 +60,12 @@ ls.add_snippets("typst", {
 				i(3),
 				i(2),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- For side by side image (but only shared caption)
-		"image_side-by-side",
+		'image_side-by-side',
 		fmt(
 			[[
         #figure(
@@ -86,12 +86,12 @@ ls.add_snippets("typst", {
 				i(4),
 				i(2),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- For a grid of images (can have individual captions)
-		"grid-1-images",
+		'grid-1-images',
 		fmt(
 			[[
 			 #grid(
@@ -120,12 +120,12 @@ ls.add_snippets("typst", {
 				i(6),
 				i(5),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- image function only, meant to be used within "figure" function
-		"image_only",
+		'image_only',
 		fmt(
 			[[
         image("<>", width: 70%)
@@ -133,12 +133,12 @@ ls.add_snippets("typst", {
 			{
 				i(1),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- "table" meant to be used inside "figure" environment
-		"table_1_booktabs-style",
+		'table_1_booktabs-style',
 		fmt(
 			[[
         table(
@@ -158,12 +158,12 @@ ls.add_snippets("typst", {
 				i(2),
 				i(3),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for headings
-		"heading",
+		'heading',
 		fmt(
 			[[
         #heading(
@@ -175,12 +175,12 @@ ls.add_snippets("typst", {
 			{
 				i(1),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for boilerplate (Page settings and LaTeX fonts)
-		"boiler_general_1",
+		'boiler_general_1',
 		fmt(
 			[[
         // Page settings
@@ -193,12 +193,12 @@ ls.add_snippets("typst", {
         #set text(font: "New Computer Modern")
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for boilerplate (pretty section headers)
-		"boiler_general_2",
+		'boiler_general_2',
 		fmt(
 			[[
         // Prettify numbered and unnumbered section headers
@@ -222,12 +222,12 @@ ls.add_snippets("typst", {
         }
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for boilerplate (Pretty image and tables)
-		"boiler_general_3",
+		'boiler_general_3',
 		fmt(
 			[[
         // Prettify image and tables (figure floats)
@@ -250,12 +250,12 @@ ls.add_snippets("typst", {
           #it.body]
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for boilerplate (Pretty lists)
-		"boiler_general_4",
+		'boiler_general_4',
 		fmt(
 			[[
         // Prettify unnumbered and numbered lists
@@ -273,24 +273,24 @@ ls.add_snippets("typst", {
         )[#it]
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for boilerplate (Math equation numbering)
-		"boiler_general_5",
+		'boiler_general_5',
 		fmt(
 			[[
         // Give math equations numberings
         #set math.equation(numbering: "(1)")
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for front matter (Reports)
-		"frontmatter_1_reports_boiler",
+		'frontmatter_1_reports_boiler',
 		fmt(
 			[[
         // Front matter starts
@@ -310,12 +310,12 @@ ls.add_snippets("typst", {
         ]
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for table of contents
-		"toc_boiler",
+		'toc_boiler',
 		fmt(
 			[[
         // TOC
@@ -334,26 +334,93 @@ ls.add_snippets("typst", {
         // )
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for main matter (general settings)
-		"mainmatter_1_settings_boiler",
+		'mainmatter_1_settings_boiler',
 		fmt(
 			[[
         // Main content starts (general settings)
         #pagebreak()
         #set page(numbering: "1") // Start numbering here (arabic numerals)
         #set par(leading: 0.55em, spacing: 0.55em, first-line-indent: 1.8em, justify: true)
+        // #set par(leading: 1.5em, spacing: 1.5em, first-line-indent: 1.8em, justify: true)
       ]],
 			{},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
+		)
+	),
+
+	s( -- shortcut for main matter (general settings)
+		'mainmatter_2_page_number',
+		fmt(
+			[[
+		// Set page number to "Page x of y"
+		#set page(
+		  footer: context [
+			#set align(right)
+			#set text(8pt)
+			#let lastPage = counter(page).final()
+			Page #text(weight: "bold")[#counter(page).display()] of #text(weight: "bold")[#lastPage.first()]
+		  ]
+		)
+	  ]],
+			{},
+			{ delimiters = '<>' }
+		)
+	),
+
+	s( -- shortcut for main matter (general settings)
+		'mainmatter_3_pagebreak',
+		fmt(
+			[[
+        #pagebreak()
+      ]],
+			{},
+			{ delimiters = '<>' }
+		)
+	),
+
+	s( -- shortcut for main matter
+		'mainmatter_4_center_rectangle',
+		fmt(
+			[[
+		#align(center)[
+			#rect(fill: blue.lighten(80%), stroke: 1pt, inset: 10pt, radius:4pt)[
+				<>
+			]
+		]
+      ]],
+			{
+				i(1),
+			},
+			{ delimiters = '<>' }
+		)
+	),
+
+	s( -- shortcut for main matter
+		'mainmatter_5_center_rectangle_align',
+		fmt(
+			[[
+		#align(center)[
+			#rect(fill: blue.lighten(80%), stroke: 1pt, inset: 10pt, radius:4pt)[
+				#align(left)[
+					<>
+				]
+			]
+		]
+      ]],
+			{
+				i(1),
+			},
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for tables read in from CSV and (optionally) in landscape mode
-		"table_2_csv",
+		'table_2_csv',
 		fmt(
 			[[
         // Importing CSV and splitting into header and content
@@ -400,12 +467,12 @@ ls.add_snippets("typst", {
 				i(3), -- Caption
 				i(4), -- Label
 			},
-			{ delimiters = "<>", repeat_duplicates = true }
+			{ delimiters = '<>', repeat_duplicates = true }
 		)
 	),
 
 	s( -- shortcut for table cells
-		"table_3_cells",
+		'table_3_cells',
 		fmt(
 			[[
         table.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>]
@@ -415,12 +482,12 @@ ls.add_snippets("typst", {
 				i(2),
 				i(3),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for adding columns with dictionary
-		"table_4_csv_dict_add_col",
+		'table_4_csv_dict_add_col',
 		fmt(
 			[[
         // Adding new columns by specifying a dictionary as ("row number": "content")
@@ -437,12 +504,12 @@ ls.add_snippets("typst", {
 				i(2),
 				i(3),
 			},
-			{ delimiters = "<>", repeat_duplicates = true }
+			{ delimiters = '<>', repeat_duplicates = true }
 		)
 	),
 
 	s( -- shortcut for adding columns by specifying row numbers
-		"table_5_csv_row_add_col",
+		'table_5_csv_row_add_col',
 		fmt(
 			[[
         // Adding new columns by specifying row numbers as strings e.g. ("1", "5")
@@ -460,12 +527,12 @@ ls.add_snippets("typst", {
 				i(3),
 				i(4),
 			},
-			{ delimiters = "<>", repeat_duplicates = true }
+			{ delimiters = '<>', repeat_duplicates = true }
 		)
 	),
 
 	s( -- shortcut for adding fills parameter
-		"table_6_fills",
+		'table_6_fills',
 		fmt(
 			[[
         fill: (_, col) =>> {
@@ -476,12 +543,12 @@ ls.add_snippets("typst", {
         },
       ]],
 			{},
-			{ delimiters = "<>", repeat_duplicates = true }
+			{ delimiters = '<>', repeat_duplicates = true }
 		)
 	),
 
 	s( -- shortcut for table cells
-		"table-7-cells",
+		'table-7-cells',
 		fmt(
 			[[
         table.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>],
@@ -491,12 +558,12 @@ ls.add_snippets("typst", {
 				i(2),
 				i(3),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- shortcut for grid cells
-		"grid-2-cells",
+		'grid-2-cells',
 		fmt(
 			[[
         grid.cell(colspan: <>, rowspan: <>, align:(horizon + center))[<>],
@@ -506,12 +573,12 @@ ls.add_snippets("typst", {
 				i(2),
 				i(3),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- For a normal grid
-		"grid-3-normal",
+		'grid-3-normal',
 		fmt(
 			[[
 			 #grid(
@@ -530,12 +597,12 @@ ls.add_snippets("typst", {
 				i(1),
 				i(2),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 
 	s( -- For adding an object for alignment
-		"alignment",
+		'alignment',
 		fmt(
 			[[
 			 #align(center + horizon)[
@@ -545,7 +612,7 @@ ls.add_snippets("typst", {
 			{
 				i(1),
 			},
-			{ delimiters = "<>" }
+			{ delimiters = '<>' }
 		)
 	),
 })
