@@ -265,15 +265,8 @@ vim.opt.rtp:prepend(lazypath)
 --
 -- NOTE: Here is where you install your plugins.
 require('lazy').setup({
-  -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
-  'NMAC427/guess-indent.nvim', -- Detect tabstop and shiftwidth automatically
-
-  -- NOTE: Plugins can also be added by using a table,
-  -- with the first argument being the link and the following
-  -- keys can be used to configure plugin behavior/loading/etc.
-  --
-  -- Use `opts = {}` to automatically pass options to a plugin's `setup()` function, forcing the plugin to be loaded.
-  --
+  -- NOTE: Plugins can be added via a link or github org/name. To run setup automatically, use `opts = {}`
+  { 'NMAC427/guess-indent.nvim', opts = {} }, -- Detect tabstop and shiftwidth automatically
 
   -- Alternatively, use `config = function() ... end` for full control over the configuration.
   -- If you prefer to call `setup` explicitly, use:
@@ -292,13 +285,16 @@ require('lazy').setup({
   -- See `:help gitsigns` to understand what the configuration keys do
   { -- Adds git related signs to the gutter, as well as utilities for managing changes
     'lewis6991/gitsigns.nvim',
+    ---@module 'gitsigns'
+    ---@type Gitsigns.Config
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
+        add = { text = '+' }, ---@diagnostic disable-line: missing-fields
+        change = { text = '~' }, ---@diagnostic disable-line: missing-fields
+        delete = { text = '_' }, ---@diagnostic disable-line: missing-fields
+        topdelete = { text = '‾' }, ---@diagnostic disable-line: missing-fields
+        changedelete = { text = '~' }, ---@diagnostic disable-line: missing-fields
       },
     },
   },
@@ -320,6 +316,9 @@ require('lazy').setup({
   {                     -- Useful plugin to show you pending keybinds.
     'folke/which-key.nvim',
     event = 'VimEnter', -- Sets the loading event to 'VimEnter'
+    ---@module 'which-key'
+    ---@type wk.Opts
+    ---@diagnostic disable-next-line: missing-fields
     opts = {
       -- delay between pressing a key and opening which-key (milliseconds)
       -- this setting is independent of vim.opt.timeoutlen
@@ -369,7 +368,7 @@ require('lazy').setup({
         { '<leader>l', group = '[L]aTeX' },
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
-        { '<leader>h', group = 'Git [H]unk',                mode = { 'n', 'v' } },
+        -- { '<leader>h', group = 'Git [H]unk',                mode = { 'n', 'v' } },
       },
     },
   },
@@ -430,11 +429,15 @@ require('lazy').setup({
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
-        -- defaults = {
-        --   mappings = {
-        --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
-        --   },
-        -- },
+        defaults = {
+          wrap_results = false, -- Word wrap the search results (default: false)
+          path_display = { 'smart' },
+          -- path_display = { 'shorten' },
+          -- path_display = { 'filename_first' },
+          -- mappings = {
+          --   i = { ['<c-enter>'] = 'to_fuzzy_refine' },
+          -- },
+        },
         -- pickers = {}
         extensions = {
           ['ui-select'] = {
@@ -453,7 +456,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
       vim.keymap.set('n', '<leader>st', builtin.builtin, { desc = '[S]earch Select [T]elescope' })
-      vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
+      vim.keymap.set({ 'n', 'v' }, '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
       vim.keymap.set('n', '<leader>sd', builtin.diagnostics, { desc = '[S]earch [D]iagnostics' })
       vim.keymap.set('n', '<leader>sr', builtin.resume, { desc = '[S]earch [R]esume' })
@@ -480,10 +483,10 @@ require('lazy').setup({
         }
       end, { desc = '[S]earch [/] in Open Files' })
 
-      -- Shortcut for searching your Neovim configuration files
-      vim.keymap.set('n', '<leader>sn', function()
-        builtin.find_files { cwd = vim.fn.stdpath 'config' }
-      end, { desc = '[S]earch [N]eovim files' })
+      -- -- Shortcut for searching your Neovim configuration files
+      -- vim.keymap.set('n', '<leader>sn', function()
+      --   builtin.find_files { cwd = vim.fn.stdpath 'config' }
+      -- end, { desc = '[S]earch [N]eovim files' })
 
       -- Shortcut for searching your Neovim configuration files (follow Doom Emacs)
       vim.keymap.set('n', '<leader>fp', function()
@@ -1047,7 +1050,7 @@ require('lazy').setup({
   },
 
   -- Highlight todo, notes, etc in comments
-  { 'folke/todo-comments.nvim', event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
+  { 'folke/todo-comments.nvim',  event = 'VimEnter', dependencies = { 'nvim-lua/plenary.nvim' }, opts = { signs = false } },
 
   { -- Collection of various small independent plugins/modules
     'echasnovski/mini.nvim',
@@ -1133,7 +1136,7 @@ require('lazy').setup({
   },
 
   -- Comment.nvim - Adds linewise and blockwise commenting capabilities
-  { 'numToStr/Comment.nvim',    opts = {} },
+  { 'numToStr/Comment.nvim', opts = {} },
 
   -- Surround
   {
@@ -1146,19 +1149,55 @@ require('lazy').setup({
   -- { 'tpope/vim-repeat', opts = {} },
 
   -- VimTex
-  { 'lervag/vimtex',     lazy = false },
+  { 'lervag/vimtex',         lazy = false },
 
-  -- Leap - Jump around the visible area quickly
+  -- Flash - Jump around the visible area quickly
   {
-    'ggandor/leap.nvim',
-    dependencies = {
-      'tpope/vim-repeat',
-      opts = {},
-      config = function()
-        vim.keymap.set({ 'n', 'x', 'o' }, 's', '<Plug>(leap-forward)')
-        vim.keymap.set({ 'n', 'x', 'o' }, 'S', '<Plug>(leap-backward)')
-        vim.keymap.set('n', 'gs', '<Plug>(leap-from-window)')
-      end,
+    'folke/flash.nvim',
+    event = 'VeryLazy',
+    ---@type Flash.Config
+    opts = {},
+    keys = {
+      {
+        's',
+        mode = { 'n', 'x', 'o' },
+        function()
+          require('flash').jump()
+        end,
+        desc = 'Flash',
+      },
+      {
+        'S',
+        mode = { 'n', 'x', 'o' },
+        function()
+          require('flash').treesitter()
+        end,
+        desc = 'Flash Treesitter',
+      },
+      {
+        'r',
+        mode = 'o',
+        function()
+          require('flash').remote()
+        end,
+        desc = 'Remote Flash',
+      },
+      {
+        'R',
+        mode = { 'o', 'x' },
+        function()
+          require('flash').treesitter_search()
+        end,
+        desc = 'Treesitter Search',
+      },
+      {
+        '<c-s>',
+        mode = { 'c' },
+        function()
+          require('flash').toggle()
+        end,
+        desc = 'Toggle Flash Search',
+      },
     },
   },
 
@@ -1170,16 +1209,20 @@ require('lazy').setup({
   },
 
   {
-    'iamcco/markdown-preview.nvim',
-    cmd = { 'MarkdownPreviewToggle', 'MarkdownPreview', 'MarkdownPreviewStop' },
-    ft = { 'markdown' },
-    build = function()
-      vim.fn['mkdp#util#install']()
-    end,
+    'selimacerbas/markdown-preview.nvim',
+    dependencies = { 'selimacerbas/live-server.nvim' },
     config = function()
+      require('markdown_preview').setup {
+        instance_mode = 'takeover',
+        port = 0,
+        open_browser = true,
+        default_theme = 'light',
+        debounce_ms = 300,
+      }
       vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mp', '<Plug>MarkdownPreview')
       vim.keymap.set({ 'n', 'v', 'x' }, '<leader>ms', '<Plug>MarkdownPreviewStop')
-      vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mt', '<Plug>MarkdownPreviewToggle')
+      vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mr', '<Plug>MarkdownPreviewRefresh')
+      -- vim.keymap.set({ 'n', 'v', 'x' }, '<leader>mt', '<Plug>MarkdownPreviewToggle')
     end,
   },
 
@@ -1225,7 +1268,7 @@ require('lazy').setup({
         sources = sources,
         -- you can reuse a shared lspconfig on_attach callback here
         on_attach = function(client, bufnr)
-          if client.supports_method 'textDocument/formatting' then
+          if client:supports_method 'textDocument/formatting' then
             vim.api.nvim_clear_autocmds { group = augroup, buffer = bufnr }
             vim.api.nvim_create_autocmd('BufWritePre', {
               group = augroup,
